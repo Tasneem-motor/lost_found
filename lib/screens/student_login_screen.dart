@@ -3,6 +3,8 @@ import '../theme/app_colors.dart';
 import 'student_home_screen.dart';
 import 'create_account_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class StudentLoginScreen extends StatefulWidget {
   const StudentLoginScreen({super.key});
@@ -24,7 +26,6 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
 
 
   Future<void> loginStudent() async {
-     print("Current user: ${FirebaseAuth.instance.currentUser}");
   if (!_formKey.currentState!.validate()) return;
 
   final sapId = _sapIdController.text.trim();
@@ -39,14 +40,31 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
       email: email,
       password: password,
     );
+    final user = FirebaseAuth.instance.currentUser;
+    final uid = user!.uid;
+
 
     if (!mounted) return;
 
+    final query = await FirebaseFirestore.instance
+    .collection('students')
+    .where('uid', isEqualTo: uid)
+    .get();
+
+     final data = query.docs.first.data();
+
+
     // ✅ Login successful
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const StudentHomeScreen()),
-    );
+  context,
+  MaterialPageRoute(
+    builder: (_) => StudentHomeScreen(
+      userName: data['name'],
+      sapId: data['sapId'],
+    ),
+  ),
+);
+
 
   } on FirebaseAuthException catch (e) {
     String errorMessage = "Login failed";
