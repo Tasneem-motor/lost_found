@@ -5,7 +5,6 @@ import 'report_found_screen.dart';
 import 'my_reports_screen.dart';
 import 'choose_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class StudentHomeScreen extends StatelessWidget {
@@ -27,6 +26,7 @@ class StudentHomeScreen extends StatelessWidget {
 
     // ✅ SIDEBAR
     drawer: Drawer(
+      
       child: Column(
         children: [
 

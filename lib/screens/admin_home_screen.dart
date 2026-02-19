@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'admin_dashboard.dart';
+import 'lost_reports_screen.dart';
+import 'found_reports_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -7,16 +8,50 @@ class AdminHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Home')),
+      appBar: AppBar(
+        title: const Text('Admin Home'),
+        centerTitle: true,
+      ),
       body: Center(
-        child: ElevatedButton(
-          child: const Text('View All Reports'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) =>  AdminDashboard()),
-            );
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+            SizedBox(
+              width: 220,
+              height: 50,
+              child: ElevatedButton(
+                child: const Text('View Lost Reports'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => LostReportsScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: 220,
+              height: 50,
+              child: ElevatedButton(
+                child: const Text('View Found Reports'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const FoundReportsScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+          ],
         ),
       ),
     );

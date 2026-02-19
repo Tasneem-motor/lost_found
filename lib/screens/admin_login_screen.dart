@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/center_card_layout.dart';
-import 'admin_dashboard.dart';
+import 'admin_home_screen.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -31,7 +31,11 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (_) =>  AdminDashboard()),
+                      builder: (_) =>  AdminHomeScreen()),
+                );
+              }else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Invalid credentials")),
                 );
               }
             },
@@ -40,6 +44,14 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       ),
     );
   }
+
+  @override
+void dispose() {
+  _user.dispose();
+  _pass.dispose();
+  super.dispose();
+}
+
 
   Widget _box(TextEditingController c, String l,
       {bool isPassword = false}) {

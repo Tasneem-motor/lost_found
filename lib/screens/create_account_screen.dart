@@ -64,7 +64,7 @@ Future<void> createAccount() async {
         .collection('students')
         .doc(sapId)
         .set({
-      'name': _name.text,
+      'name': name,
       'sapId': sapId,
       'uid': userCredential.user!.uid,
       'createdAt': FieldValue.serverTimestamp(),
