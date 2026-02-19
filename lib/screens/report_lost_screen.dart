@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/center_card_layout.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ReportLostScreen extends StatefulWidget {
   const ReportLostScreen({super.key});
@@ -13,6 +16,43 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
   final _desc = TextEditingController();
   final _location = TextEditingController();
   DateTime? lostDate;
+
+  Future<void> submitLostReport() async {
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) return;
+
+  // 🔹 fetch student info
+  final query = await FirebaseFirestore.instance
+      .collection('students')
+      .where('uid', isEqualTo: user.uid)
+      .get();
+
+  final student = query.docs.first.data();
+
+  await FirebaseFirestore.instance
+      .collection('lost_reports')
+      .add({
+    'itemName': _title.text.trim(),
+    'description': _desc.text.trim(),
+    'location': _location.text.trim(),
+    'sapId': student['sapId'],
+    'userName': student['name'],
+    'uid': user.uid,
+    'lost on': lostDate,
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  if (!context.mounted) return;
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("Lost item reported")),
+  );
+
+  Navigator.pop(context);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +83,7 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
               },
               child: Text(
                 lostDate == null
-                    ? "Select Date"
+                    ? "Date Lost (Optional)"
                     : "${lostDate!.day}/${lostDate!.month}/${lostDate!.year}",
               ),
             ),
@@ -72,9 +112,7 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
       width: 180,
       height: 45,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
+        onPressed: submitLostReport,
         child: const Text("Submit"),
       ),
     );
