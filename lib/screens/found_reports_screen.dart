@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
 
 class FoundReportsScreen extends StatelessWidget {
   FoundReportsScreen({super.key});
@@ -41,7 +44,6 @@ class FoundReportsScreen extends StatelessWidget {
 
               final doc = docs[index];
               final data = doc.data() as Map<String, dynamic>;
-              final handedToDept = data['handedToDept'] ?? "No";
               final claimed = data['claimed'] ?? false;
               final received = data['received'] ?? false;
 
@@ -52,6 +54,14 @@ class FoundReportsScreen extends StatelessWidget {
               final formattedDate = date != null
                   ? "${date.day}-${date.month}-${date.year}"
                   : "No Date";
+
+              String? base64Image = data['image'];
+
+              Uint8List? imageBytes;
+
+              if (base64Image != null && base64Image.isNotEmpty) {
+                imageBytes = base64Decode(base64Image);
+              }
 
               return Card(
                 elevation: 4,
@@ -75,6 +85,32 @@ class FoundReportsScreen extends StatelessWidget {
                       Text("Found on: $formattedDate"),
                       Text("Handed to department ? ${data['handedToDept'] ?? ''}"),
                       const SizedBox(height: 10),
+
+                       if (imageBytes != null)
+                      TextButton.icon(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.memory(
+                                      imageBytes!,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.visibility),
+                        label: const Text("View Image"),
+                      ),
+
 
                       const SizedBox(height: 12),
 

@@ -18,6 +18,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
 
+  String? _designation;
+
 Future<void> createAccount() async {
 
     if (!_formKey.currentState!.validate()) {
@@ -27,6 +29,13 @@ Future<void> createAccount() async {
   if (_password.text != _confirmPassword.text) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Passwords do not match")),
+    );
+    return;
+  }
+
+  if (_designation == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please select designation")),
     );
     return;
   }
@@ -67,6 +76,7 @@ Future<void> createAccount() async {
       'name': name,
       'sapId': sapId,
       'uid': userCredential.user!.uid,
+      'designation': _designation,
       'createdAt': FieldValue.serverTimestamp(),
     });
     
@@ -109,6 +119,41 @@ Future<void> createAccount() async {
         key: _formKey,
         child: Column(
           children: [
+
+            const SizedBox(height: 14),
+
+            SizedBox(
+              width: 260,
+              child: DropdownButtonFormField<String>(
+                value: _designation,
+                decoration: const InputDecoration(
+                  labelText: "Designation",
+                  border: OutlineInputBorder(),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: "Student",
+                    child: Text("Student"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Faculty",
+                    child: Text("Faculty"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Staff",
+                    child: Text("Staff"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _designation = value;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? "Please select designation" : null,
+              ),
+            ),
+
             _inputBox(
               controller: _sapId,
               label: "SAP ID",

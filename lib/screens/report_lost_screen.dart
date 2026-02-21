@@ -50,6 +50,7 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
     'userName': student['name'],
     'uid': user.uid,
     'lost on': lostDate,
+    'resolved': false,
     'createdAt': FieldValue.serverTimestamp(),
   });
 

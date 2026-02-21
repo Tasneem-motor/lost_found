@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/data_store.dart';
-import '../theme/app_colors.dart';
 import 'view_lost_reports.dart';
 import 'view_found_reports.dart';
 

@@ -10,7 +10,9 @@ class ViewLostReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: lostReports.snapshots(),
+        stream: lostReports
+        .where('resolved', isEqualTo: false)
+        .snapshots(),
         builder: (context, snapshot) {
 
           if (snapshot.hasError) {

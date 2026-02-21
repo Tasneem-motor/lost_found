@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
 class MyFoundReportsScreen extends StatelessWidget {
   MyFoundReportsScreen({super.key});
@@ -51,6 +53,14 @@ class MyFoundReportsScreen extends StatelessWidget {
               final formattedDate = date != null
                   ? "${date.day}-${date.month}-${date.year}"
                   : "No Date";
+              
+              String? base64Image = data['image'];
+
+              Uint8List? imageBytes;
+
+              if (base64Image != null && base64Image.isNotEmpty) {
+                imageBytes = base64Decode(base64Image);
+              }
 
               return Card(
                 elevation: 4,
@@ -67,8 +77,36 @@ class MyFoundReportsScreen extends StatelessWidget {
                       Text("Description: ${data['description'] ?? ''}"),
                       Text("Location: ${data['location'] ?? ''}"),
                       Text("Reported on: $formattedDate"),
+
+                      if (imageBytes != null)
+                    TextButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    imageBytes!,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.visibility),
+                      label: const Text("View Image"),
+                    ),
                     ],
                   ),
+
+                  
+                      
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

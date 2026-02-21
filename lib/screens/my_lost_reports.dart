@@ -2,11 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MyLostReportsScreen extends StatelessWidget {
-  MyLostReportsScreen({super.key});
+class MyLostReportsScreen extends StatefulWidget {
+  const MyLostReportsScreen({super.key});
+
+  @override
+  State<MyLostReportsScreen> createState() =>
+      _MyLostReportsScreenState();
+}
+
+class _MyLostReportsScreenState extends State<MyLostReportsScreen> {
 
   final CollectionReference lostReports =
       FirebaseFirestore.instance.collection('lost_reports');
+
+  Future<void> markAsResolved(DocumentSnapshot doc) async {
+  final confirm = await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Confirm Resolution"),
+        content: const Text(
+          "Once marked as resolved, this cannot be changed. Continue?",
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
+          Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 6),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Confirm"),
+          ),
+        ],
+      )]);
+    },
+  );
+
+  if (confirm == true) {
+    await doc.reference.update({"resolved": true});
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +70,16 @@ class MyLostReportsScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final docs = snapshot.data!.docs;
-
+          final docs = snapshot.data!.docs.toList()
+            ..sort((a, b) {
+              final aResolved = (a.data() as Map)['resolved'] ?? false;
+              final bResolved = (b.data() as Map)['resolved'] ?? false;
+              return aResolved == bResolved
+                  ? 0
+                  : aResolved
+                      ? 1   // true goes last
+                      : -1;
+            });
           if (docs.isEmpty) {
             return const Center(child: Text("Lost item's reports made by you will appear here"));
           }
@@ -43,6 +90,7 @@ class MyLostReportsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final doc = docs[index];
               final data = doc.data() as Map<String, dynamic>;
+              final resolved = data['resolved'] ?? false;
 
 
               final timestamp = data['lost on'] as Timestamp?;
@@ -56,24 +104,69 @@ class MyLostReportsScreen extends StatelessWidget {
                 elevation: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
-                  title: Text(
-                    data['itemName'] ?? 'No Title',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (resolved)
+                      Text(
+                        data['itemName'] ?? 'No Title',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontStyle: resolved ? FontStyle.italic : FontStyle.normal,
+                          color: resolved ? Colors.grey : Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 6),
-                      Text("Description: ${data['description'] ?? ''}"),
-                      Text("Location: ${data['location'] ?? ''}"),
-                      Text("Lost on: $formattedDate"),
+                      Text(
+                        "Description: ${data['description'] ?? ''}",
+                        style: TextStyle(
+                          fontStyle: resolved ? FontStyle.italic : FontStyle.normal,
+                          color: resolved ? Colors.grey : Colors.black,
+                        ),
+                      ),
+                      Text("Location: ${data['location'] ?? ''}",
+                        style: TextStyle(
+                            fontStyle: resolved ? FontStyle.italic : FontStyle.normal,
+                            color: resolved ? Colors.grey : Colors.black,
+                          ),
+                          ),
+                      Text("Lost on: $formattedDate",
+                        style: TextStyle(
+                            fontStyle: resolved ? FontStyle.italic : FontStyle.normal,
+                            color: resolved ? Colors.grey : Colors.black,
+                          ),
+                          ),
                     ],
                   ),
-                  trailing: Row(
+
+                  
+                  trailing: 
+                  Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
 
-                       // 🗑 Delete Button
+                      resolved
+                        ? const Text(
+                            "Resolved",
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Switch(
+                            value: resolved,
+                            onChanged: (value) {
+                              markAsResolved(doc);
+                            },
+                          ),
+
+                       // Delete Button
+                      if (!resolved)
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {

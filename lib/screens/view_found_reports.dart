@@ -51,6 +51,14 @@ class ViewFoundReportsScreen extends StatelessWidget {
                   ? "${date.day}-${date.month}-${date.year}"
                   : "No Date";
 
+              String? base64Image = data['image'];
+
+              Uint8List? imageBytes;
+
+              if (base64Image != null && base64Image.isNotEmpty) {
+                imageBytes = base64Decode(base64Image);
+              }
+
               return Card(
                 elevation: 4,
                 margin: const EdgeInsets.only(bottom: 12),
@@ -68,8 +76,33 @@ class ViewFoundReportsScreen extends StatelessWidget {
                       Text("Found on: $formattedDate"),
                       Text("Report made by: ${data['userName'] ?? ''} (SAP Id: ${data['sapId'] ?? ''})"),
 
+                      if (imageBytes != null)
+                      TextButton.icon(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.memory(
+                                      imageBytes!,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.visibility),
+                        label: const Text("View Image"),
+                      ),
+
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: received
                               ? Colors.green.withValues(alpha: 0.1)
