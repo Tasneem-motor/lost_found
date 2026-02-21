@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../widgets/center_card_layout.dart';
 import 'report_lost_screen.dart';
 import 'report_found_screen.dart';
-import 'my_reports_screen.dart';
+import 'view_all_reports.dart';
 import 'choose_login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'my_reports_screen.dart';
 
 
 class StudentHomeScreen extends StatelessWidget {
@@ -39,6 +40,22 @@ class StudentHomeScreen extends StatelessWidget {
             ),
           ),
 
+          // ✅ MY REPORTS BUTTON
+          ListTile(
+            leading: const Icon(Icons.assignment),
+            title: const Text("My Reports"),
+            onTap: () {
+              Navigator.pop(context); // closes drawer first
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MyReportsScreen(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
           // LOGOUT BUTTON
           ListTile(
             leading: const Icon(Icons.logout),
@@ -81,9 +98,9 @@ class StudentHomeScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _menuButton(
             context,
-            "My Reports",
+            "View all Reports",
             Icons.list_alt,
-            const MyReportsScreen(),
+            const ViewAllReports(),
           ),
         ],
       ),

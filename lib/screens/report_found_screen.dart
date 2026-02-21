@@ -4,8 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -45,6 +44,11 @@ class _ReportFoundScreenState extends State<ReportFoundScreen> {
 
 
 Future<void> submitFoundItem() async {
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  if (user == null) return;
+
   if (_title.text.isEmpty ||
       _desc.text.isEmpty ||
       _location.text.isEmpty ||
@@ -67,20 +71,34 @@ Future<void> submitFoundItem() async {
   );
   return;
 }
+  final query = await FirebaseFirestore.instance
+      .collection('students')
+      .where('uid', isEqualTo: user.uid)
+      .get();
+
+  final student = query.docs.first.data();
 
 
   // 🔹 Save to Firestore
-  await firestore.collection("found_items").add({
+  await firestore.collection("found_reports").add({
     "title": _title.text,
     "description": _desc.text,
     "location": _location.text,
+    "sapId": student['sapId'],
+    "userName": student['name'],
     "handedToDept": handedToDept ?? "No",
+    "claimed": false,
     "image": base64Image,
+    "received" : false,
     "timestamp": FieldValue.serverTimestamp(),
+    'uid': user.uid,
   });
 
+  if (!context.mounted) return;
+
+
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text("Item submitted successfully")),
+    const SnackBar(content: Text("Item reported successfully")),
   );
 
   Navigator.pop(context);

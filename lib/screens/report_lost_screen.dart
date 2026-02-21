@@ -23,6 +23,15 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
 
   if (user == null) return;
 
+  if (_title.text.isEmpty ||
+      _desc.text.isEmpty ||
+      _location.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please fill all fields and select image")),
+    );
+    return;
+  }
+
   // 🔹 fetch student info
   final query = await FirebaseFirestore.instance
       .collection('students')
@@ -47,7 +56,7 @@ class _ReportLostScreenState extends State<ReportLostScreen> {
   if (!context.mounted) return;
 
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text("Lost item reported")),
+    const SnackBar(content: Text("Lost item reported successfully")),
   );
 
   Navigator.pop(context);

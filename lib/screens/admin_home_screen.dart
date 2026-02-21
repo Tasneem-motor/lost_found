@@ -44,7 +44,7 @@ class AdminHomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const FoundReportsScreen(),
+                      builder: (_) => FoundReportsScreen(),
                     ),
                   );
                 },

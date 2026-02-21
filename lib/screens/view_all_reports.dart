@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../models/data_store.dart';
 import '../theme/app_colors.dart';
-import 'my_lost_reports.dart';
-import 'my_found_reports.dart';
+import 'view_lost_reports.dart';
+import 'view_found_reports.dart';
 
 
-class MyReportsScreen extends StatelessWidget {
-  const MyReportsScreen({super.key});
+class ViewAllReports extends StatelessWidget {
+  const ViewAllReports({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +14,19 @@ class MyReportsScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("My Reports"),
+          title: const Text("View All Reports"),
           bottom: const TabBar(
             tabs: [
-              Tab(text: "My lost items"),
-              Tab(text: "My found items"),
+              Tab(text: "Lost Item's Reports"),
+              Tab(text: "Found Item's Reports"),
             ],
           ),
         ),
 
         body: TabBarView(
           children: [
-            MyLostReportsScreen(),
-            MyFoundReportsScreen(),
+            ViewLostReportsScreen(),
+            ViewFoundReportsScreen(),
           ],
         ),
       ),

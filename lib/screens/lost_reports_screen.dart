@@ -26,6 +26,10 @@ class LostReportsScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           final docs = snapshot.data!.docs;
 
           if (docs.isEmpty) {
