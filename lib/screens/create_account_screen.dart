@@ -154,6 +154,8 @@ Future<void> createAccount() async {
               ),
             ),
 
+            const SizedBox(height: 14),
+
             _inputBox(
               controller: _sapId,
               label: "SAP ID",
