@@ -14,6 +14,9 @@ class ViewAllReports extends StatelessWidget {
         appBar: AppBar(
           title: const Text("View All Reports"),
           bottom: const TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: Colors.white,
             tabs: [
               Tab(text: "Lost Item's Reports"),
               Tab(text: "Found Item's Reports"),

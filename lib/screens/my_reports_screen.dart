@@ -14,6 +14,9 @@ class MyReportsScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text("My Reports"),
           bottom: const TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: Colors.white,
             tabs: [
               Tab(text: "My lost items"),
               Tab(text: "My found items"),

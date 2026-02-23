@@ -28,10 +28,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             "Login",
                 () {
               if (_user.text == "admin" && _pass.text == "admin123") {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (_) =>  AdminHomeScreen()),
+                    builder: (_) => AdminHomeScreen(),
+                  ),
+                  (route) => false,
                 );
               }else {
                 ScaffoldMessenger.of(context).showSnackBar(

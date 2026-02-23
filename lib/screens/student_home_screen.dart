@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'my_reports_screen.dart';
 
 
+
 class StudentHomeScreen extends StatelessWidget {
   final String userName;
   final String sapId;
@@ -33,10 +34,18 @@ class StudentHomeScreen extends StatelessWidget {
 
           // PROFILE HEADER
           UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: Color(0xFF629BB6)
+            ),
             accountName: Text(userName),
             accountEmail: Text("SAP ID: $sapId"),
             currentAccountPicture: const CircleAvatar(
-              child: Icon(Icons.person, size: 35),
+              backgroundColor: Color(0xFFD6EBF3), 
+              child: Icon(
+                Icons.person,
+                size: 35,
+                color: Color(0xFF447F98),
+              ),
             ),
           ),
 

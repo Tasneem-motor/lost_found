@@ -72,7 +72,7 @@ class AuthWrapper extends StatelessWidget {
             }
             final sapId = roleSnapshot.data!['sapId'];
             final username = roleSnapshot.data!['name'];
-            final role = roleSnapshot.data!['uid'];
+            final role = roleSnapshot.data!['designation'];
 
             if (role == 'admin') {
               return const AdminHomeScreen();

@@ -26,7 +26,7 @@ class CenterCardLayout extends StatelessWidget {
                 children: [
                   Icon(icon,
                       size: 70,
-                      color: Theme.of(context).colorScheme.primary),
+                      color: Color(0xFF447F98),),
 
                   const SizedBox(height: 12),
 

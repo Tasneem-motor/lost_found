@@ -9,5 +9,5 @@ class AppColors {
 
   static const Color background = iceBlue;
   static const Color card = Colors.white;
-  static const Color textDark = Color(0xFF2E3A40);
+  static const Color textDark = Color.fromARGB(255, 20, 25, 27);
 }

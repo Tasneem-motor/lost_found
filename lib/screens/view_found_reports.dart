@@ -97,6 +97,10 @@ class ViewFoundReportsScreen extends StatelessWidget {
                             },
                           );
                         },
+                        style: TextButton.styleFrom(
+                        foregroundColor: Color(0xFF447F98),
+                        ),
+
                         icon: const Icon(Icons.visibility),
                         label: const Text("View Image"),
                       ),

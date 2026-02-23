@@ -54,16 +54,17 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
      final data = query.docs.first.data();
 
 
-    // ✅ Login successful
-    Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(
-    builder: (_) => StudentHomeScreen(
-      userName: data['name'],
-      sapId: data['sapId'],
-    ),
-  ),
-);
+    // Login successful
+      Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StudentHomeScreen(
+          userName: data['name'],
+          sapId: data['sapId'],
+        ),
+      ),
+      (route) => false,
+    );
 
 
   } on FirebaseAuthException catch (e) {
@@ -173,7 +174,8 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                           ),
                         );
                       },
-                      child: const Text("Create New Account"),
+                      child: const Text("Create New Account",
+                      style: TextStyle(color: Color(0xFF447F98)),),
                     ),
 
                   ],

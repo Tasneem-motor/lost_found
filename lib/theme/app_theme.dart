@@ -9,6 +9,10 @@ class AppTheme {
 
     primaryColor: AppColors.turquoise,
 
+    textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: Color(0xFF447F98),
+    ),
+
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.turquoise,
       foregroundColor: Colors.white,
