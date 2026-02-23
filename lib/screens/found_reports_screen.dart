@@ -128,7 +128,7 @@ class FoundReportsScreen extends StatelessWidget {
 
                           Switch(
                             value: received,
-                            activeColor: Colors.green,
+                            activeThumbColor: Colors.green,
                             onChanged: (value) async {
                               await FirebaseFirestore.instance
                                   .collection('found_reports')
@@ -167,7 +167,7 @@ class FoundReportsScreen extends StatelessWidget {
 
                           Switch(
                             value: claimed,
-                            activeColor: Colors.blue,
+                            activeThumbColor: Colors.blue,
                             onChanged: (value) async {
                               await FirebaseFirestore.instance
                                   .collection('found_reports')

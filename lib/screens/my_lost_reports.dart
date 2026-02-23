@@ -107,7 +107,7 @@ class _MyLostReportsScreenState extends State<MyLostReportsScreen> {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (resolved)
+                      //if (resolved)
                       Text(
                         data['itemName'] ?? 'No Title',
                         style: TextStyle(
@@ -121,6 +121,7 @@ class _MyLostReportsScreenState extends State<MyLostReportsScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      
                       const SizedBox(height: 6),
                       Text(
                         "Description: ${data['description'] ?? ''}",

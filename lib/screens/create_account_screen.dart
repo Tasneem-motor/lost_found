@@ -126,7 +126,7 @@ Future<void> createAccount() async {
             SizedBox(
               width: 260,
               child: DropdownButtonFormField<String>(
-                value: _designation,
+                initialValue: _designation,
                 decoration: const InputDecoration(
                   labelText: "Designation",
                   border: OutlineInputBorder(),

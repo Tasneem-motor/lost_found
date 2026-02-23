@@ -19,6 +19,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int handedToDept = 0;
   int selectedMonth = DateTime.now().month;
   int selectedYear = DateTime.now().year;
+  int studentLost = 0;
+  int studentFound = 0;
+
+  int facultyLost = 0;
+  int facultyFound = 0;
+
+  int staffLost = 0;
+  int staffFound = 0;
   final List<String> months = const [
     "January", "February", "March", "April",
     "May", "June", "July", "August",
@@ -56,6 +64,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       } else {
         unresolvedLost++;
       }
+      final designation = data['designation'] ?? '';
+
+      if (designation == 'Student') {
+        studentLost++;
+      } else if (designation == 'Faculty') {
+        facultyLost++;
+      } else if (designation == 'Staff') {
+        staffLost++;
+      }
     }
 
     // FOUND REPORTS
@@ -82,6 +99,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         claimedFound++;
       } else {
         unclaimedFound++;
+      }
+      final designation = data['designation'] ?? '';
+
+      if (designation == 'Student') {
+        studentFound++;
+      } else if (designation == 'Faculty') {
+        facultyFound++;
+      } else if (designation == 'Staff') {
+        staffFound++;
       }
     }
 
@@ -178,7 +204,16 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 50),
+
+                  // buildChartCard(
+                  //   title: "Reports by Designation",
+                  //   chart: buildStackedBarChart(),
+                  //   legendItems: [
+                  //     legendItem(Colors.red, "Lost Reports"),
+                  //     legendItem(Colors.blue, "Found Reports"),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -259,7 +294,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   color: Colors.green,
                   radius: 100,
                   title: "${(( resolvedLost / total) * 100).toStringAsFixed(0)}%",
-                  showTitle: false,
                 ),
                 PieChartSectionData(
                   value: unresolvedLost.toDouble(),
@@ -380,4 +414,76 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       ),
     );
   }
+
+  // 🔹 Stacked Bar Group Builder
+// BarChartGroupData buildBarGroup(
+//     int x, int lost, int found, int total) {
+
+//   final lostPercent =
+//     total == 0 ? 0.0 : (lost / total) * 100.0;
+
+//   final foundPercent =
+//     total == 0 ? 0.0 : (found / total) * 100.0;
+
+//   return BarChartGroupData(
+//     x: x,
+//     barRods: [
+//       BarChartRodData(
+//         toY: lostPercent + foundPercent,
+//         rodStackItems: [
+//           BarChartRodStackItem(
+//               0, lostPercent, Colors.red),
+//           BarChartRodStackItem(
+//               lostPercent,
+//               lostPercent + foundPercent,
+//               Colors.blue),
+//         ],
+//         borderRadius: BorderRadius.circular(6),
+//       ),
+//     ],
+//   );
+// }
+
+//   Widget buildStackedBarChart() {
+//     final studentTotal = studentLost + studentFound;
+//     final facultyTotal = facultyLost + facultyFound;
+//     final staffTotal = staffLost + staffFound;
+
+//     if (studentTotal + facultyTotal + staffTotal == 0) {
+//       return const Center(child: Text("No data available"));
+//     }
+
+//     return BarChart(
+//       BarChartData(
+//         barGroups: [
+//           buildBarGroup(0, studentLost, studentFound, studentTotal),
+//           buildBarGroup(1, facultyLost, facultyFound, facultyTotal),
+//           buildBarGroup(2, staffLost, staffFound, staffTotal),
+//         ],
+//         titlesData: FlTitlesData(
+//           bottomTitles: AxisTitles(
+//             sideTitles: SideTitles(
+//               showTitles: true,
+//               getTitlesWidget: (value, meta) {
+//                 switch (value.toInt()) {
+//                   case 0:
+//                     return const Text("Student");
+//                   case 1:
+//                     return const Text("Faculty");
+//                   case 2:
+//                     return const Text("Staff");
+//                 }
+//                 return const Text("");
+//               },
+//             ),
+//           ),
+//           leftTitles: AxisTitles(
+//             sideTitles: SideTitles(showTitles: false),
+//           ),
+//         ),
+//         gridData: FlGridData(show: false),
+//         borderData: FlBorderData(show: false),
+//       ),
+//     );
+//   }
 }
